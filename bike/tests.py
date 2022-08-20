@@ -4,11 +4,11 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 
-from .models import Game
+from .models import Bike
 
 
 # Create your tests here.
-class GameTest(APITestCase):
+class BikeTest(APITestCase):
     @classmethod
     def setUpTestData(cls):
         test_user1 = get_user_model().objects.create_user(
@@ -21,44 +21,44 @@ class GameTest(APITestCase):
         )
         test_user1.save()
 
-        test_game = Game.objects.create(
+        test_bike = Bike.objects.create(
             name="test_game",
             purchaser=test_user1,
             desc="testing game.",
         )
-        test_game.save()
+        test_bike.save()
 
     def setUp(self):
         self.client.login(username='test_user1', password="pass")
 
-    def test_games_model(self):
-        game = Game.objects.get(id=1)
-        actual_purchaser = str(game.purchaser)
-        actual_name = str(game.name)
-        actual_description = str(game.desc)
+    def test_bike_model(self):
+        bike = Bike.objects.get(id=1)
+        actual_purchaser = str(bike.purchaser)
+        actual_name = str(bike.name)
+        actual_description = str(bike.desc)
         self.assertEqual(actual_purchaser, "test_user1")
-        self.assertEqual(actual_name, "test_game")
+        self.assertEqual(actual_name, "test_bike")
         self.assertEqual(
-            actual_description, "testing game."
+            actual_description, "testing bike."
         )
 
-    def test_get_games_list(self):
-        url = reverse("games_list")
+    def test_get_bike_list(self):
+        url = reverse("bike_list")
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        games = response.data
-        self.assertEqual(len(games), 1)
-        self.assertEqual(games[0]["name"], "test_game")
+        bike = response.data
+        self.assertEqual(len(bike), 1)
+        self.assertEqual(bike[0]["name"], "test_game")
 
     def test_auth_required(self):
         self.client.logout()
-        url = reverse("games_list")
+        url = reverse("bike_list")
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_only_purchaser_can_delete(self):
         self.client.logout()
         self.client.login(username='test_user2', password="pass")
-        url = reverse("games_detail", args=[1])
+        url = reverse("bike_detail", args=[1])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
