@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 
 
 class Bike(models.Model):
+    objects = None
     purchaser = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     desc = models.TextField()
