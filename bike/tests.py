@@ -21,9 +21,9 @@ class BikeTest(APITestCase):
         test_user1.save()
 
         test_bike = Bike.objects.create(
-            name="test_game",
+            name="test_bike",
             purchaser=test_user1,
-            desc="testing game.",
+            desc="testing bike.",
         )
         test_bike.save()
 
@@ -47,7 +47,7 @@ class BikeTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         bike = response.data
         self.assertEqual(len(bike), 1)
-        self.assertEqual(bike[0]["name"], "test_game")
+        self.assertEqual(bike[0]["name"], "test_bike")
 
     def test_auth_required(self):
         self.client.logout()
